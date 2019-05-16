@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "962622738763",
+    "firebase_url": "https://kartel-59019.firebaseio.com",
+    "project_id": "kartel-59019",
+    "storage_bucket": "kartel-59019.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962622738763:android:8c89096905997bbd",
+        "android_client_info": {
+          "package_name": "com.example.kartel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962622738763-cftusndlodfg2ur9uc1i2ahcdlb7onss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV2ZKIf9ttH7JCJLzbNixeck1O1chylGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962622738763-cftusndlodfg2ur9uc1i2ahcdlb7onss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962622738763:android:4371ef812d0f1c8c",
+        "android_client_info": {
+          "package_name": "com.example.kartelapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962622738763-cftusndlodfg2ur9uc1i2ahcdlb7onss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV2ZKIf9ttH7JCJLzbNixeck1O1chylGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962622738763-cftusndlodfg2ur9uc1i2ahcdlb7onss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
