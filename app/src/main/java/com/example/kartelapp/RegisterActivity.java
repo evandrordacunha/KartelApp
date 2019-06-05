@@ -22,7 +22,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -177,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 String userName = mEditNome.getText().toString();
                                 String profileUrl = uri.toString();
                                 //USUÁRIO NOVO CADASTRADO
-                                UserActivity usuario = new UserActivity(userID, userName, profileUrl);
+                                User usuario = new User(userID, userName, profileUrl);
 
                                 //CRIANDO A REFERÂNCIA PARA UMA COLEÇÃO DE USUÁRIOS
                                 FirebaseFirestore.getInstance().collection("usuarios").document(userID)

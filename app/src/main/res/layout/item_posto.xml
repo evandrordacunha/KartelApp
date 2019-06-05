@@ -6,18 +6,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/v_razao_social2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Posto"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/im_bandeira"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/im_bandeira"
+        app:layout_constraintTop_toTopOf="@+id/im_bandeira"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ImageView
         android:id="@+id/im_bandeira"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="58dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.077"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -28,11 +43,155 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:text="Posto"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:text="Razao Social"
         app:layout_constraintBottom_toBottomOf="@+id/im_bandeira"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/im_bandeira"
-        app:layout_constraintTop_toTopOf="@+id/im_bandeira" />
+        app:layout_constraintTop_toTopOf="@+id/im_bandeira"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/v_endereco"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Endereco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toEndOf="@+id/im_bandeira"
+        app:layout_constraintTop_toBottomOf="@+id/v_razao_social" />
+
+    <TextView
+        android:id="@+id/v_bairro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Bairro"
+        app:layout_constraintStart_toEndOf="@+id/im_bandeira"
+        app:layout_constraintTop_toBottomOf="@+id/v_endereco" />
+
+    <TextView
+        android:id="@+id/v_cidade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Cidade"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/v_bairro"
+        app:layout_constraintTop_toBottomOf="@+id/v_endereco" />
+
+    <TextView
+        android:id="@+id/v_gasolinaComum"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Gas. Comum:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_bairro" />
+
+    <TextView
+        android:id="@+id/v_etanol"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Etanol:"
+        app:layout_constraintStart_toEndOf="@+id/v_gasolinaAditivada"
+        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+
+    <TextView
+        android:id="@+id/v_gasolinaAditivada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Gas. Aditivada:"
+        app:layout_constraintStart_toEndOf="@+id/v_gasolinaComum"
+        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+
+    <TextView
+        android:id="@+id/v_diesel"
+        android:layout_width="51dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="Diesel"
+        app:layout_constraintStart_toEndOf="@+id/v_etanol"
+        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+
+    <TextView
+        android:id="@+id/v_gnv"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="GNV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/v_diesel"
+        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+
+    <TextView
+        android:id="@+id/v_vlComum"
+        android:layout_width="86dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="RS"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_gasolinaComum" />
+
+    <TextView
+        android:id="@+id/v_vlAditivada"
+        android:layout_width="93dp"
+        android:layout_height="wrap_content"
+        android:text="R$"
+        app:layout_constraintEnd_toEndOf="@+id/v_gasolinaAditivada"
+        app:layout_constraintTop_toBottomOf="@+id/v_gasolinaAditivada" />
+
+    <TextView
+        android:id="@+id/v_vlEtanol"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="R$"
+        app:layout_constraintStart_toEndOf="@+id/v_vlAditivada"
+        app:layout_constraintTop_toBottomOf="@+id/v_etanol" />
+
+    <TextView
+        android:id="@+id/v_vlDiesel"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="R$"
+        app:layout_constraintEnd_toStartOf="@+id/v_gnv"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/v_vlEtanol"
+        app:layout_constraintTop_toBottomOf="@+id/v_diesel" />
+
+    <TextView
+        android:id="@+id/v_vlGnv"
+        android:layout_width="49dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="R$"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="98dp" />
+
 </android.support.constraint.ConstraintLayout>

@@ -1,17 +1,11 @@
-package com.example.kartelapp.ui.postosdenunciados;
+package com.example.kartelapp;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.kartelapp.Posto;
-import com.example.kartelapp.R;
+import com.example.kartelapp.ui.postosdenunciados.PostosDenunciadosFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,32 +14,41 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class PostosDenunciadosFragment extends Fragment {
+public class DenunciaActivity extends AppCompatActivity{
 
-    private PostosDenunciadosViewModel mViewModel;
-    private static final String TAG = "TESTE";
+    private static final String TAG = "Documentos";
     private ArrayList<Posto> postosDenunciados;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public static PostosDenunciadosFragment newInstance() {
-        return new PostosDenunciadosFragment();
+
+    public DenunciaActivity(ArrayList<Posto> postosDenunciados, FirebaseFirestore db) {
+        this.postosDenunciados = postosDenunciados;
+        this.db = db;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.postos_denunciados_fragment, container, false);
+    public static String getTAG() {
+        return TAG;
+    }
+
+    public ArrayList<Posto> getDenuncias() {
+        return postosDenunciados;
+    }
+
+    public void setDenuncias(ArrayList<Posto> postosDenunciados) {
+        this.postosDenunciados = postosDenunciados;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(PostosDenunciadosViewModel.class);
-        // TODO: Use the ViewModel
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.postos_denunciados_activity);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, PostosDenunciadosFragment.newInstance())
+                    .commitNow();
+        }
         buscarPostosMaisDenunciados();
     }
-
     private ArrayList<String> buscarPostosMaisDenunciados() {
         final ArrayList<String> denuncias = new ArrayList<>();
         db.collection("denuncias")
@@ -57,7 +60,7 @@ public class PostosDenunciadosFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 denuncias.add(document.getData().toString());
-                                Log.d(TAG, document.getId() + " => " + document.getData().toString());
+                                Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

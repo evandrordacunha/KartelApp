@@ -36,7 +36,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback , LocationListener {
 
@@ -113,9 +112,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         //ADICIONA MARCADORES
                                         PrincipalActivity principalActivity = new PrincipalActivity();
                                         // Add a marker in Sydney and move the camera
-                                        String nome = p.getRazaoSocial();
+                                        String nome = p.getNome();
                                         LatLng posto = new LatLng(principalActivity.getLatitudeClient(), principalActivity.getLongitudeClient());
-                                        mMap.addMarker(new MarkerOptions().position(posto).title(p.getRazaoSocial()));
+                                        mMap.addMarker(new MarkerOptions().position(posto).title(p.getNome()));
                                         mMap.moveCamera(CameraUpdateFactory.newLatLng(posto));
 
                                         Log.d("TESTE", nome + " marcado!");

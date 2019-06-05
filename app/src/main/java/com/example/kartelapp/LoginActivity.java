@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
         mAdminRedirect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
                 startActivity(intent);
             }
         });

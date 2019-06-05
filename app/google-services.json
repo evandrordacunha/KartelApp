@@ -44,6 +44,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "962622738763-tfb9vr9iduqepbno3e8liopn0p7bs22c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kartelapp",
+            "certificate_hash": "2dd01cec42ccd0db19bdf4502ccd352b6732fe5e"
+          }
+        },
+        {
+          "client_id": "962622738763-lhdesudubslifnsnb35ms7rid5ehi0o0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kartelapp",
+            "certificate_hash": "a7981bd6a3538504430b2f3c5707557fe61058f7"
+          }
+        },
+        {
           "client_id": "962622738763-cftusndlodfg2ur9uc1i2ahcdlb7onss.apps.googleusercontent.com",
           "client_type": 3
         }

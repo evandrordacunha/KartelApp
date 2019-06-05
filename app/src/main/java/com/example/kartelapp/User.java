@@ -1,11 +1,11 @@
 package com.example.kartelapp;
 
-public class UserActivity {
+public class User {
     private final String userID;
     private final String userName;
     private final String profileUrl;
 
-    public UserActivity(String userID, String userName, String profileUrl) {
+    public User(String userID, String userName, String profileUrl) {
         this.userID = userID;
         this.userName = userName;
         this.profileUrl = profileUrl;
