@@ -2,17 +2,22 @@ package com.example.kartelapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,6 +30,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
+import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.Item;
+import com.xwray.groupie.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +46,7 @@ public class PrincipalActivity extends AppCompatActivity
     private double latitudeClient;
     private double longitudeClient;
     private static ArrayList<Posto> listaPostos = new ArrayList<>();
+    private GroupAdapter adapter;
     //Button btnLocalizarMapa;
 
 
@@ -71,7 +81,11 @@ public class PrincipalActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        //CONFIGURANDO ADAPTER PARA EXIBIÇÃO DA LISTA POSTOS NA RECYCLER VIEW
+        RecyclerView rv = findViewById(R.id.rv_listaPostos);
+        adapter = new GroupAdapter();
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
         fetchPostos();
 
     }
@@ -216,9 +230,79 @@ public class PrincipalActivity extends AppCompatActivity
                         for (DocumentSnapshot doc:documentos) {
                           Posto posto =  doc.toObject(Posto.class);
                             Log.d("TESTE",posto.getNome());
+                            adapter.add(new PostoItem(posto));
                         }
                     }
                 });
+    }
+
+    /**
+     * CLASSE INTERNA RESPONSAVEL POR MANIPULAR ITENS QUE APARECERÃO NA RECYCLER VIEW LISTANDOS OS POSTOS
+     */
+    private  class PostoItem extends Item<ViewHolder> {
+        private final Posto posto;
+
+        private PostoItem(Posto posto) {
+            this.posto = posto;
+        }
+
+        @Override
+        public void bind(@NonNull ViewHolder viewHolder, int position) {
+            //CONECTANDO AOS OBJETOS PARA PODER EDITAR SEUS VALORES
+            TextView nome = viewHolder.itemView.findViewById(R.id.v_razao_social);
+            TextView endereco = viewHolder.itemView.findViewById(R.id.v_endereco);
+            TextView bairro = viewHolder.itemView.findViewById(R.id.v_bairro);
+            TextView cidade = viewHolder.itemView.findViewById(R.id.v_cidade);
+            TextView gasolinaComum = viewHolder.itemView.findViewById(R.id.v_vlComum);
+            TextView gasolinaAditivada = viewHolder.itemView.findViewById(R.id.v_vlAditivada);
+            TextView etanol = viewHolder.itemView.findViewById(R.id.v_vlEtanol);
+            TextView diesel = viewHolder.itemView.findViewById(R.id.v_vlDiesel);
+            TextView gnv = viewHolder.itemView.findViewById(R.id.v_vlGnv);
+            ImageView bandeiraIcone = viewHolder.itemView.findViewById(R.id.im_bandeira);
+
+            //CARREGANDO IMAGEM DAS BANDEIRAS TESTANDO PAA CADA UM DOS POSTOS
+            if(posto.getBandeira().equalsIgnoreCase("PETROBRAS")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraPetrobras.jpg?alt=media&token=d53b4fee-d299-4422-a9e7-43d034613ec5")
+                        .into(bandeiraIcone);
+            }
+            if(posto.getBandeira().equalsIgnoreCase("IPIRANGA")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraIpiranga.jpg?alt=media&token=b0c55805-61cc-45f2-886f-51be07bb0fed")
+                        .into(bandeiraIcone);
+            }
+            if(posto.getBandeira().equalsIgnoreCase("SHELL")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraShell.jpg?alt=media&token=4874b289-f988-4dce-aa09-7011f0e1db9e")
+                        .into(bandeiraIcone);
+            }
+            if(posto.getBandeira().equalsIgnoreCase("MEGAPETRO")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraMegapetro.jpg?alt=media&token=71eed8b5-05f4-4e81-9a40-e4081bcf8de6")
+                        .into(bandeiraIcone);
+            }
+            if(posto.getBandeira().equalsIgnoreCase("BRANCA")){
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraBranca.jpg?alt=media&token=bee27663-f1a9-48bc-9243-6856f95929f7")
+                        .into(bandeiraIcone);
+            }
+
+            //POPULANDO DADOS DO ITEM COM O RESTANTE DOS ATRIBUTOS
+            nome.setText(posto.getNome());
+            endereco.setText(posto.getEndereco());
+            bairro.setText(posto.getBairro());
+            cidade.setText(posto.getCidade());
+            gasolinaComum.setText(posto.getPrecoGasolinaComum());
+            gasolinaAditivada.setText(posto.getPrecoGasolinaAditivada());
+            etanol.setText(posto.getPrecoEtanol());
+            diesel.setText(posto.getPrecoDiesel());
+            gnv.setText(posto.getPrecoGnv());
+        }
+
+        @Override
+        public int getLayout() {
+            return R.layout.item_posto;
+        }
     }
 
 }

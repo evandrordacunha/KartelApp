@@ -1,33 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/branco"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/v_razao_social2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Posto"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/im_bandeira"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/im_bandeira"
-        app:layout_constraintTop_toTopOf="@+id/im_bandeira"
-        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/im_bandeira"
-        android:layout_width="58dp"
-        android:layout_height="56dp"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
@@ -46,6 +30,7 @@
         android:text="Posto"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:background="@color/branco"
         app:layout_constraintBottom_toBottomOf="@+id/im_bandeira"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -55,6 +40,7 @@
 
     <TextView
         android:id="@+id/v_endereco"
+        android:background="@color/branco"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -70,6 +56,7 @@
     <TextView
         android:id="@+id/v_bairro"
         android:layout_width="0dp"
+        android:background="@color/branco"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -81,8 +68,11 @@
         android:id="@+id/v_cidade"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@color/branco"
         android:text="Cidade"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/v_bairro"
@@ -90,108 +80,125 @@
 
     <TextView
         android:id="@+id/v_gasolinaComum"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="Gas. Comum:"
+        android:layout_width="72dp"
+        android:layout_height="19dp"
+        android:background="@color/branco"
+        android:text="G.Comum"
+        android:textAlignment="center"
+        android:textColor="@color/azulFraco"
+        app:layout_constraintEnd_toStartOf="@+id/v_gasolinaAditivada"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_bairro" />
+        app:layout_constraintTop_toTopOf="@+id/v_gasolinaAditivada" />
 
     <TextView
         android:id="@+id/v_etanol"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:background="@color/branco"
         android:text="Etanol:"
-        app:layout_constraintStart_toEndOf="@+id/v_gasolinaAditivada"
+        android:textAlignment="center"
+        android:textColor="@color/verdeMilitar"
+        app:layout_constraintEnd_toStartOf="@+id/v_diesel"
         app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
 
     <TextView
         android:id="@+id/v_gasolinaAditivada"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="Gas. Aditivada:"
-        app:layout_constraintStart_toEndOf="@+id/v_gasolinaComum"
+        android:background="@color/branco"
+        android:text="G.Aditivada"
+        android:textAlignment="center"
+        android:textColor="@color/azulForte"
+        app:layout_constraintEnd_toStartOf="@+id/v_etanol"
         app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
 
     <TextView
         android:id="@+id/v_diesel"
         android:layout_width="51dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:background="@color/branco"
         android:text="Diesel"
-        app:layout_constraintStart_toEndOf="@+id/v_etanol"
+        android:textAlignment="center"
+        android:textColor="@color/preto"
+        app:layout_constraintEnd_toStartOf="@+id/v_gnv"
         app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
 
     <TextView
         android:id="@+id/v_gnv"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@color/branco"
         android:text="GNV"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/v_diesel"
-        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/v_vl_bandeira"
+        app:layout_constraintTop_toTopOf="@+id/v_etanol" />
 
     <TextView
         android:id="@+id/v_vlComum"
-        android:layout_width="86dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="72dp"
+        android:layout_height="19dp"
+        android:background="@color/branco"
         android:text="RS"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textAlignment="center"
+        android:textFontWeight="bold"
+        app:layout_constraintEnd_toEndOf="@+id/v_gasolinaComum"
         app:layout_constraintTop_toBottomOf="@+id/v_gasolinaComum" />
 
     <TextView
         android:id="@+id/v_vlAditivada"
-        android:layout_width="93dp"
-        android:layout_height="wrap_content"
+        android:layout_width="71dp"
+        android:background="@color/branco"
+        android:layout_height="19dp"
+        android:textFontWeight="bold"
         android:text="R$"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/v_gasolinaAditivada"
         app:layout_constraintTop_toBottomOf="@+id/v_gasolinaAditivada" />
 
     <TextView
         android:id="@+id/v_vlEtanol"
-        android:layout_width="57dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="56dp"
+        android:layout_height="19dp"
+        android:background="@color/branco"
+        android:textFontWeight="bold"
         android:text="R$"
-        app:layout_constraintStart_toEndOf="@+id/v_vlAditivada"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/v_etanol"
         app:layout_constraintTop_toBottomOf="@+id/v_etanol" />
 
     <TextView
         android:id="@+id/v_vlDiesel"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="51dp"
+        android:layout_height="19dp"
+        android:background="@color/branco"
+        android:textFontWeight="bold"
         android:text="R$"
-        app:layout_constraintEnd_toStartOf="@+id/v_gnv"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toEndOf="@+id/v_vlEtanol"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/v_diesel"
         app:layout_constraintTop_toBottomOf="@+id/v_diesel" />
 
     <TextView
         android:id="@+id/v_vlGnv"
-        android:layout_width="49dp"
+        android:layout_width="50dp"
+        android:background="@color/branco"
+        android:layout_height="19dp"
+        android:textFontWeight="bold"
+        android:textAlignment="center"
+        android:text="R$"
+        app:layout_constraintEnd_toEndOf="@+id/v_gnv"
+        app:layout_constraintTop_toBottomOf="@+id/v_gnv" />
+
+    <TextView
+        android:id="@+id/v_vl_bandeira"
+        android:background="@color/branco"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="R$"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="98dp" />
+        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

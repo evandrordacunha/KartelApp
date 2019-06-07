@@ -2,7 +2,7 @@ package com.example.kartelapp;
 
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -177,7 +177,6 @@ public class Dados {
      */
     public void inserirPostos(Activity activity) {
 
-        //RAZAO SOCIAL;ENDERECO;BAIRRO;CIDADE;ESTADO;PAIS;BANDEIRA;GASOLINA COMUM;GASOLINA ADITIVADA;ETANOL;DIESEL;GNV;LATITUDE;LONGITUDE;DATA COLETA;
         InputStream is = activity.getResources().openRawResource(R.raw.distribuidores2019);
         List<String[]> resultado = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));

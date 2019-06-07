@@ -1,6 +1,6 @@
 package com.example.kartelapp.ui.compartilhar;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class CompartilharViewModel extends ViewModel {
     // TODO: Implement the ViewModel

@@ -2,8 +2,8 @@ package com.example.kartelapp;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
