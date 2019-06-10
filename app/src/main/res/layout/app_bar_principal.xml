@@ -25,12 +25,22 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView2"
+            android:layout_width="match_parent"
+            android:layout_height="301dp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_listaPostos"
+            android:layout_width="match_parent"
+            android:layout_height="337dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+<!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_listaPostos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="423dp" />
+-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

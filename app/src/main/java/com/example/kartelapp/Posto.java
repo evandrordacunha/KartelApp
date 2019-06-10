@@ -1,5 +1,9 @@
 package com.example.kartelapp;
 
+import com.google.firebase.firestore.GeoPoint;
+
+import java.text.NumberFormat;
+
 public class Posto {
     private String nome;
     private String cnpj;
@@ -9,6 +13,8 @@ public class Posto {
     private String cidade;
     private String latitude;
     private String longitude;
+    private String latitudeString;
+    private String longitudeString;
     private String estado;
     private String pais;
     private String precoGasolinaAditivada;
@@ -17,6 +23,7 @@ public class Posto {
     private String precoDiesel;
     private String precoGnv;
     private String ultimaAtualizacao;
+
 
     public Posto() {
     }
@@ -150,26 +157,7 @@ public class Posto {
         this.estado = estado;
     }
 
-    public String toString() {
-        String s =
-                "Razão Social:  " + getNome() + "\n"
-                        + "CNPJ:  " + getCnpj() + "\n"
-                        + "Bandeira:  " + getBandeira() + "\n"
-                        + "Endereço:  " + getEndereco() + "\n"
-                        + "Bairro  " + getBairro() + "\n"
-                        + "Município:  " + getCidade() + "\n"
-                        + "UF:  " + getEstado() + "\n"
-                        + "País: " + getPais() + "\n"
-                        + "Latitude:  " + getLatitude() + "\n"
-                        + "Longitude:  " + getLongitude() + "\n"
-                        + "Preço Gasolina Comum: " + getPrecoGasolinaComum() + "\n"
-                        + "Preço Gasolina Aditivada: " + getPrecoGasolinaAditivada() + "\n"
-                        + "Preço Etanol: " + getPrecoEtanol() + "\n"
-                        + "Preço Diesel: " + getPrecoDiesel() + "\n"
-                        + "Preço GNV " + getPrecoGnv() + "\n"
-                        + "Última atualização: " + getUltimaAtualizacao();
-        return s;
-    }
+
 
     public Posto(String razaoSocial, String cnpj, String distribuidora, String endereco, String bairro, String municipio, String uf, String pais, String latitude, String longitude, String precoGasolinaAditivada, String precoGasolinaComum, String precoEtanol, String precoDiesel, String precoGnv, String ultimaAtualizacao) {
         this.nome = razaoSocial;
@@ -217,4 +205,6 @@ public class Posto {
         this.precoGnv = precoGnv;
 
     }
+
+
 }

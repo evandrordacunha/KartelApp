@@ -10,9 +10,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.provider.Settings;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,19 +34,41 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback , LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     private Marker localizaoUsuario;
+    private Marker localizaoPosto;
     private LatLng latLng;
+    private double userLatitude;
+    private double userLongitude;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private List<Posto> postosProximos = new ArrayList<>();
 
+    public double getUserLatitude() {
+        return userLatitude;
+    }
+
+    public void setUserLatitude(double userLatitude) {
+        this.userLatitude = userLatitude;
+    }
+
+    public double getUserLongitude() {
+        return userLongitude;
+    }
+
+    public void setUserLongitude(double userLongitude) {
+        this.userLongitude = userLongitude;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +93,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
 /*
+
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.setSnippet("Detalhes do marcador");
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         */
 
@@ -82,18 +110,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(usuario).title("Minha Localização"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(usuario));
 */
-        //adicionarMarcadores();
+
+        carregarPostos();
         buscarLocalizacaoGps();
+
+
     }
 
     /**
      * BUSCA POSTOS INSERIDOS NO FIRESTORE E ADICIONA NO MAPA SEUS MARCADORES
      */
+
     private void adicionarMarcadores() {
+
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("postos")
+        db.collection("/postos")
                 .whereEqualTo("estado", "RS")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -103,21 +136,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             for (final QueryDocumentSnapshot document : task.getResult()) {
                                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                                DocumentReference docRef = db.collection("postos").document(document.getId());
+                                DocumentReference docRef = db.collection("/postos").document(document.getId());
                                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         Posto p = documentSnapshot.toObject(Posto.class);
+                                        //AQUI É FEITO O CALCULO DA DISTANCIA EM METROS ENTRE O USUÁRIO E O POSTO IMPORTADO DA BASE
 
-                                        //ADICIONA MARCADORES
-                                        PrincipalActivity principalActivity = new PrincipalActivity();
-                                        // Add a marker in Sydney and move the camera
-                                        String nome = p.getNome();
-                                        LatLng posto = new LatLng(principalActivity.getLatitudeClient(), principalActivity.getLongitudeClient());
-                                        mMap.addMarker(new MarkerOptions().position(posto).title(p.getNome()));
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(posto));
+                                        double lat = Double.parseDouble(p.getLatitude());
+                                        double lon = Double.parseDouble(p.getLongitude());
 
-                                        Log.d("TESTE", nome + " marcado!");
+
+                                        double distanciaCalculada = calcularDistanciaEmMetros(userLatitude, userLongitude, lat, lon);
+                                        //SE O POSTO TIVER ATÉ 2KM PRÓXIMO AO USUÁRIO ENTÃO EXIBE O MARCADOR
+                                        if (distanciaCalculada <= 2000) {
+                                            //ADICIONA MARCADORES E MOVE A CAMERA
+                                            PrincipalActivity principalActivity = new PrincipalActivity();
+                                            String nomePosto = p.getNome();
+                                            String distanciaPosto = "" + distanciaCalculada;
+                                            mMap.addMarker(new MarkerOptions().position(latLng).title(p.getNome()));
+                                            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).build();
+                                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                            Log.d("TESTE", p.getNome() + " marcado!");
+                                        }
                                     }
                                 });
 
@@ -127,8 +168,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 });
-
     }
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -138,11 +179,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             localizaoUsuario.remove();
         }
         //ATUALIZA LATITUDE E LONGITUDE
-        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        //latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        latLng = new LatLng(-30.0581445,-51.1767154);
+        //APROVEITA E ATUALIZA TAMBÉM LATITUDE E LONGITUDE SEPARADAS PARA SEREM USADAS POSTERIORMENTES EM OUTROS MÉTODOS
+        userLatitude = location.getLatitude();
+        userLongitude = location.getLongitude();
         //GERENCIANDO PROPRIEDADES DO MARCADOR A SER ADICIONADO
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Localização atual");
+        markerOptions.title("Minha localização");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         localizaoUsuario = mMap.addMarker(markerOptions);
 
@@ -150,6 +195,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(latLng).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         Toast.makeText(this, "Localização atualizada!", Toast.LENGTH_SHORT).show();
+
+        //MARCADORES A SEREM ADICIONADOS
+
+        for(int i = 0; i < postosProximos.size();i++){
+            Posto p = postosProximos.get(i);
+
+            double lat = Double.parseDouble(p.getLatitude());
+            //Log.d("LATITUDE",p.getLatitude());
+            double lon = Double.parseDouble(p.getLongitude());
+
+
+            LatLng posto = new LatLng(lat, lon);
+            mMap.addMarker(new MarkerOptions().position(posto).title(p.getNome()));
+            mMap.setContentDescription("Gasolina: R$ "+p.getPrecoGasolinaComum());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(posto));
+
+        }
     }
 
     @Override
@@ -297,5 +359,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getMarkers() {
 
 
+    }
+
+    /**
+     * MÉTODO RESPONSÁVEL POR CALCULAR A DISTANCIA ENTRE DOIS PONTOS EM LINHA RETA USANDO A FÓRMULA DE HAVERSINE
+     *
+     * @param minhaLatitude
+     * @param minhaLongitude
+     * @param latitudePosto
+     * @param longitudePosto
+     * @return
+     */
+    private double calcularDistanciaEmMetros(double minhaLatitude, double minhaLongitude, double latitudePosto, double longitudePosto) {
+
+        final int raioTerrestre = 6371;
+        double userLatitude = Math.toRadians(latitudePosto - minhaLatitude);
+        double userLongitude = Math.toRadians(longitudePosto - minhaLongitude);
+        double postoLat = Math.sin(userLatitude / 2);
+        double postoLong = Math.sin(userLongitude / 2);
+        double a = Math.pow(postoLat, 2) + Math.pow(postoLong, 2) * Math.cos(Math.toRadians(minhaLatitude)) * Math.cos(Math.toRadians(latitudePosto));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distancia = raioTerrestre * c;
+        return distancia * 1000; //distância em metros
+    }
+
+    /**
+     * POPULANDO MARCADORES
+     */
+    public void carregarPostos() {
+        //CRIA UMA REFERENCIA PARA A COLEÇÃO DE POSTOS
+        FirebaseFirestore.getInstance().collection("/postos")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        //VERIFICANDO SE ENCONTROU ALGUMA EXCEÇÃO CAPAZ DE IMPEDIR A EXECUÇÃO, CASO ENCONTRE, PARE A APLICAÇÃO
+                        if(e != null){
+                            Log.e("TESTE","Erro: ",e);
+                            return;
+                        }
+
+                        //REFERÊNCIA PARA TODOS POSTOS DA BASE
+                        List <DocumentSnapshot> documentos = queryDocumentSnapshots.getDocuments();
+
+                        for (DocumentSnapshot doc:documentos) {
+                            Posto posto =  doc.toObject(Posto.class);
+                             postosProximos.add(posto);
+                        }
+                    }
+                });
     }
 }

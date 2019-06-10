@@ -10,6 +10,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,7 +84,7 @@ public class PrincipalActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //CONFIGURANDO ADAPTER PARA EXIBIÇÃO DA LISTA POSTOS NA RECYCLER VIEW
-        RecyclerView rv = findViewById(R.id.rv_listaPostos);
+       RecyclerView rv = findViewById(R.id.rv_listaPostos);
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -199,15 +201,6 @@ public class PrincipalActivity extends AppCompatActivity
         return listaPostos;
     }
 
-    private String imprimirPostos() {
-        String s = "";
-        for (int i = 0; i < listaPostos.size(); i++) {
-            s = s + listaPostos.get(i).toString() + "\n";
-            Log.d("Posto:  ", listaPostos.get(i).getNome()+" está na lista!");
-
-        }
-        return "Postos cadastrados  " + s;
-    }
 
     /**
      * BUSCANDO POSTOS DO FIREBASE PARA POPULAR O RECYCLER VIEW NA TELA PRINCIPAL

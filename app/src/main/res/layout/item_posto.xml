@@ -133,7 +133,7 @@
         android:background="@color/branco"
         android:text="GNV"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/v_vl_bandeira"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/v_etanol" />
 
     <TextView
@@ -190,15 +190,5 @@
         android:text="R$"
         app:layout_constraintEnd_toEndOf="@+id/v_gnv"
         app:layout_constraintTop_toBottomOf="@+id/v_gnv" />
-
-    <TextView
-        android:id="@+id/v_vl_bandeira"
-        android:background="@color/branco"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
