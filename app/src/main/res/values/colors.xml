@@ -12,4 +12,6 @@
     <color name="cinzaFraco">#A9A9A9</color>
     <color name="cinzaMegaFraco">#DCDCDC</color>
     <color name="verdeMilitar">#008000</color>
+    <color name="laranja">#FF4500</color>
+
 </resources>
