@@ -2,7 +2,9 @@ package com.example.kartelapp;
 
 
 import android.app.Activity;
+
 import androidx.annotation.NonNull;
+
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -20,6 +22,7 @@ import java.util.Map;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -79,7 +82,7 @@ public class Dados {
                 String diesel = coluna[11];
                 String gnv = coluna[12];
                 String latitude = coluna[13];
-                String  longitude = coluna[14];
+                String longitude = coluna[14];
                 String dataColeta = coluna[15];
 
                 //CRIANDO REFERENCIA DE POSTO DE COMBUSTIVEL
@@ -137,6 +140,36 @@ public class Dados {
             }
         }
     }
+
+    public void registrarReclamacao(final Denuncia denuncia) {
+        //ADICIONANDO O POSTO A BASE DO CLOUD FIRESTORE
+        Map<String, Object> dado = new HashMap<>();
+
+        dado.put("comprovante", denuncia.getComprovante());
+        dado.put("data", denuncia.getData());
+        dado.put("dataAtendimento", denuncia.getDataAtendimento());
+        dado.put("idUsuario", denuncia.getIdUsuario().toUpperCase());
+        dado.put("posto", denuncia.getPosto());
+        dado.put("motivo", denuncia.getMotivo().toUpperCase());
+
+
+        //INSERE POSTO  E CRIA DOCUMENTO BASEADO NO CNPJ SEM A MÁSCARA, APENAS NÚMEROS
+        db.collection("denuncias")
+                .add(dado).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d("TESTE", "RECLAMAÇÃO SOBRE O POSTO " + denuncia.getPosto() + " REGISTRADA!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("ERRO", "não foi possível registrar a reclamação!");
+
+            }
+        });
+    }
+
+
 }
 
 

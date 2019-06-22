@@ -12,7 +12,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,16 +42,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
@@ -66,43 +60,21 @@ public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,LocationManager,LocationListener, OnMapReadyCallback {
 
 
-    private static final String TAG = "TESTE";
-    private double latitudeClient;
-    private double longitudeClient;
-    private Location location;
-    private static ArrayList<Posto> listaPostos = new ArrayList<>();
     private GroupAdapter adapter;
-    private Button mButtonVerMapa;
     private GoogleMap mMap;
-    private Marker localizaoUsuario;
-    private Marker localizaoPosto;
+    private Marker marcadorUsuario;
     private LatLng latLng;
-    private double userLatitude;
-    private double userLongitude;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    double userLatitude;
+    double userLongitude;
+    private  double distanciaAproximada;
     private List<Posto> postosProximos = new ArrayList<>();
 
-
-
-    public double getLatitudeClient() {
-        return latitudeClient;
-    }
-
-    public void setLatitudeClient(double latitudeClient) {
-        this.latitudeClient = latitudeClient;
-    }
-
-    public double getLongitudeClient() {
-        return longitudeClient;
-    }
-
-    public void setLongitudeClient(double longitudeClient) {
-        this.longitudeClient = longitudeClient;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -120,13 +92,13 @@ public class PrincipalActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //CONFIGURANDO ADAPTER PARA EXIBIÇÃO DA LISTA POSTOS NA RECYCLER VIEW
-       RecyclerView rv = findViewById(R.id.rv_listaPostos);
+        buscarLocalizacaoGps();
+        RecyclerView rv = findViewById(R.id.rv_listaPostos);
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setAdapter(adapter);
-        buscarLocalizacaoGps();
-        fetchPostos();
 
+        rv.setAdapter(adapter);
+       // fetchPostos();
 
     }
 
@@ -158,7 +130,7 @@ public class PrincipalActivity extends AppCompatActivity
         //ACTION PARA FAZER LOGOFF DA APLICAÇÃO
         if (id == R.id.action_settings) {
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(this,LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             return true;
         }
@@ -181,7 +153,7 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) {
-            Intent intent = new Intent(getApplicationContext(), DenunciaActivity.class);
+            Intent intent = new Intent(getApplicationContext(), PostosMaisDenunciadosActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
@@ -207,28 +179,30 @@ public class PrincipalActivity extends AppCompatActivity
     /**
      * BUSCANDO POSTOS DO FIREBASE PARA POPULAR O RECYCLER VIEW NA TELA PRINCIPAL
      */
-    private void fetchPostos(){
+    private void fetchPostos(final double latitudeUsuario, final double longitudeUsuario) {
         //CRIA UMA REFERENCIA PARA A COLEÇÃO DE POSTOS
         FirebaseFirestore.getInstance().collection("/postos")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         //VERIFICANDO SE ENCONTROU ALGUMA EXCEÇÃO CAPAZ DE IMPEDIR A EXECUÇÃO, CASO ENCONTRE, PARE A APLICAÇÃO
-                        if(e != null){
-                            Log.e("TESTE","Erro: ",e);
+                        if (e != null) {
+                            Log.e("TESTE", "Erro: ", e);
                             return;
                         }
 
                         //REFERÊNCIA PARA TODOS POSTOS DA BASE
-                        List <DocumentSnapshot> documentos = queryDocumentSnapshots.getDocuments();
-
-
-                        for (DocumentSnapshot doc:documentos) {
-                          Posto posto =  doc.toObject(Posto.class);
-
-
-                            Log.d("TESTE",posto.getNome());
-                            adapter.add(new PostoItem(posto));
+                        List<DocumentSnapshot> documentos = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot doc : documentos) {
+                            Posto p = doc.toObject(Posto.class);
+                            double lat = Double.parseDouble(p.getLatitude());
+                            //Log.d("LATITUDE",p.getLatitude());
+                            double lon = Double.parseDouble(p.getLongitude());
+                            Haversine haversine = new Haversine();
+                            distanciaAproximada = haversine.distance(latitudeUsuario,longitudeUsuario,lat,lon);
+                            if(distanciaAproximada <=4.0){
+                                adapter.add(new PostoItem(p));
+                            }
                         }
                     }
                 });
@@ -260,7 +234,8 @@ public class PrincipalActivity extends AppCompatActivity
         pedidosPermissoes = encontrarPermissoesNecessarias(permissoes);
 
         //Verifica se o GPS e a Rede estão ligados, se não pedir ao usuário para ligar
-        if (!isGPS && !isNetwork) {
+       if (!isGPS && !isNetwork) {
+        //if (!isGPS) {
             exibirAlertas();
 
         } else {
@@ -362,6 +337,7 @@ public class PrincipalActivity extends AppCompatActivity
         }
         return true;
     }
+
     @Override
     public boolean validaPedidoPermissao() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.CUR_DEVELOPMENT);
@@ -370,47 +346,54 @@ public class PrincipalActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         //LOCALIZAÇÃO DO USUÁRIO PARA GERENCIAR O MÉTODO RESPONSÁVEL POR CALCULAR DISTANCIA EM METROS
-        userLatitude = location.getLatitude();
+       userLatitude = location.getLatitude();
         userLongitude = location.getLongitude();
+       // userLatitude = -30.0581445;
+       // userLongitude = -51.1767154;
 
+
+        fetchPostos(userLatitude,userLongitude);
         //VERIFICA SE MARCADOR JÁ EXISTE, SE JA EXISTE, REMOVE REMOVE O ATUAL PARA INCLUIR UM NOVO
-        if (localizaoUsuario != null) {
-            localizaoUsuario.remove();
+        if (marcadorUsuario != null) {
+            marcadorUsuario.remove();
         }
         //ATUALIZA LATITUDE E LONGITUDE
-        //latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        latLng = new LatLng(-30.0581445,-51.1767154);
+        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        //latLng = new LatLng(-30.0581445, -51.1767154);
 
         //GERENCIANDO PROPRIEDADES DO MARCADOR A SER ADICIONADO
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Minha localização");
+        markerOptions.title("Localização atual");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-
-
-        localizaoUsuario = mMap.addMarker(markerOptions);
+        marcadorUsuario = mMap.addMarker(markerOptions);
 
         //CENTRALIZANDO A CAMERA NO NOVO MARCADOR APONTANDO PARA A LOCALIZAÇÃO ATUAL DO USUARIO
-        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(latLng).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(latLng).build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         Toast.makeText(this, "Localização atualizada!", Toast.LENGTH_SHORT).show();
 
         //MARCADORES A SEREM ADICIONADOS
-
-        for(int i = 0; i < postosProximos.size();i++){
+        for (int i = 0; i < postosProximos.size(); i++) {
             Posto p = postosProximos.get(i);
 
             double lat = Double.parseDouble(p.getLatitude());
             //Log.d("LATITUDE",p.getLatitude());
             double lon = Double.parseDouble(p.getLongitude());
+            Haversine haversine = new Haversine();
+            distanciaAproximada = haversine.distance(location.getLatitude(),location.getLongitude(),lat,lon);
 
+            Log.d("TESTE ","Distancia ON LOCATION CHANGE "+distanciaAproximada);
 
             LatLng posto = new LatLng(lat, lon);
             mMap.addMarker(new MarkerOptions().position(posto).title(p.getNome()));
-            mMap.setContentDescription("Gasolina: R$ "+p.getPrecoGasolinaComum());
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(posto));
+            mMap.setContentDescription("Gasolina: R$ " + p.getPrecoGasolinaComum());
+            //  mMap.animateCamera(CameraUpdateFactory.newLatLng(posto));
+
 
         }
+
     }
 
     @Override
@@ -430,20 +413,18 @@ public class PrincipalActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-       //REFERENCIA PARA UM MAPA
+        //REFERENCIA PARA UM MAPA
         mMap = googleMap;
         carregarPostos();
-
-
-
     }
 
 
     /**
      * CLASSE INTERNA RESPONSAVEL POR MANIPULAR ITENS QUE APARECERÃO NA RECYCLER VIEW LISTANDOS OS POSTOS
      */
-    private  class PostoItem extends Item<ViewHolder> {
+    private class PostoItem extends Item<ViewHolder> {
         private final Posto posto;
+
 
         private PostoItem(Posto posto) {
             this.posto = posto;
@@ -453,7 +434,7 @@ public class PrincipalActivity extends AppCompatActivity
         public void bind(@NonNull ViewHolder viewHolder, int position) {
             //CONECTANDO AOS OBJETOS PARA PODER EDITAR SEUS VALORES
             TextView nome = viewHolder.itemView.findViewById(R.id.v_razao_social);
-            TextView endereco = viewHolder.itemView.findViewById(R.id.v_endereco);
+            TextView endereco = viewHolder.itemView.findViewById(R.id.v_enderecoPostoDenunciado);
             TextView bairro = viewHolder.itemView.findViewById(R.id.v_bairro);
             TextView cidade = viewHolder.itemView.findViewById(R.id.v_cidade);
             TextView gasolinaComum = viewHolder.itemView.findViewById(R.id.v_vlComum);
@@ -465,32 +446,44 @@ public class PrincipalActivity extends AppCompatActivity
             TextView distancia = viewHolder.itemView.findViewById(R.id.v_vlDistancia);
 
             double latitudePosto = Double.parseDouble(posto.getLatitude());
-            double  longitudePosto = Double.parseDouble(posto.getLongitude());
-            distancia.setText(""+calcularDistanciaEmMetros(userLatitude,userLongitude,latitudePosto,longitudePosto));
+            double longitudePosto = Double.parseDouble(posto.getLongitude());
+            double latitudeUser= userLatitude;
+            double longitudeUser= userLongitude;
+            Haversine haversine = new Haversine();
+            Log.d("TESTE" ,"Latitude celular:"+""+userLatitude);
+            Log.d("TESTE" ,"Longitude celular:"+""+userLongitude);
+            Log.d("TESTE" ,"Latitude Posto:"+""+ posto.getLatitude());
+            Log.d("TESTE" ,"Longitude Posto :"+""+posto.getLongitude());
+
+            double ditanciaAproximada = haversine.distance(latitudeUser,longitudeUser, latitudePosto, longitudePosto);
+            Log.d("TESTE" ,"distancia calculada:"+""+ditanciaAproximada);
+
+            String calcDistancia = String.valueOf(ditanciaAproximada) ;
+            distancia.setText(calcDistancia.substring(0,5));
 
 
             //CARREGANDO IMAGEM DAS BANDEIRAS TESTANDO PAA CADA UM DOS POSTOS
-            if(posto.getBandeira().equalsIgnoreCase("PETROBRAS")) {
+            if (posto.getBandeira().equalsIgnoreCase("PETROBRAS")) {
                 Picasso.get()
                         .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraPetrobras.jpg?alt=media&token=d53b4fee-d299-4422-a9e7-43d034613ec5")
                         .into(bandeiraIcone);
             }
-            if(posto.getBandeira().equalsIgnoreCase("IPIRANGA")) {
+            if (posto.getBandeira().equalsIgnoreCase("IPIRANGA")) {
                 Picasso.get()
                         .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraIpiranga.jpg?alt=media&token=b0c55805-61cc-45f2-886f-51be07bb0fed")
                         .into(bandeiraIcone);
             }
-            if(posto.getBandeira().equalsIgnoreCase("SHELL")) {
+            if (posto.getBandeira().equalsIgnoreCase("SHELL")) {
                 Picasso.get()
                         .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraShell.jpg?alt=media&token=4874b289-f988-4dce-aa09-7011f0e1db9e")
                         .into(bandeiraIcone);
             }
-            if(posto.getBandeira().equalsIgnoreCase("MEGAPETRO")) {
+            if (posto.getBandeira().equalsIgnoreCase("MEGAPETRO")) {
                 Picasso.get()
                         .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraMegapetro.jpg?alt=media&token=71eed8b5-05f4-4e81-9a40-e4081bcf8de6")
                         .into(bandeiraIcone);
             }
-            if(posto.getBandeira().equalsIgnoreCase("BRANCA")){
+            if (posto.getBandeira().equalsIgnoreCase("BRANCA")) {
                 Picasso.get()
                         .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraBranca.jpg?alt=media&token=bee27663-f1a9-48bc-9243-6856f95929f7")
                         .into(bandeiraIcone);
@@ -514,29 +507,6 @@ public class PrincipalActivity extends AppCompatActivity
         }
     }
 
-
-    /**
-     * MÉTODO RESPONSÁVEL POR CALCULAR A DISTANCIA ENTRE DOIS PONTOS EM LINHA RETA USANDO A FÓRMULA DE HAVERSINE
-     *
-     * @param minhaLatitude
-     * @param minhaLongitude
-     * @param latitudePosto
-     * @param longitudePosto
-     * @return
-     */
-    private double calcularDistanciaEmMetros(double minhaLatitude, double minhaLongitude, double latitudePosto, double longitudePosto) {
-
-        final int raioTerrestre = 6371;
-        double userLatitude = Math.toRadians(latitudePosto - minhaLatitude);
-        double userLongitude = Math.toRadians(longitudePosto - minhaLongitude);
-        double postoLat = Math.sin(userLatitude / 2);
-        double postoLong = Math.sin(userLongitude / 2);
-        double a = Math.pow(postoLat, 2) + Math.pow(postoLong, 2) * Math.cos(Math.toRadians(minhaLatitude)) * Math.cos(Math.toRadians(latitudePosto));
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distancia = raioTerrestre * c;
-        return distancia * 1000; //distância em metros
-    }
-
     /**
      * POPULANDO MARCADORES
      */
@@ -557,64 +527,19 @@ public class PrincipalActivity extends AppCompatActivity
 
                         for (DocumentSnapshot doc:documentos) {
                             Posto posto =  doc.toObject(Posto.class);
-                            postosProximos.add(posto);
-                        }
-                    }
-                });
-    }
+                            double latitudePosto = Double.parseDouble(posto.getLatitude());
+                            double longitudePosto = Double.parseDouble(posto.getLongitude());
+                            double latitudeUser= userLatitude;
+                            double longitudeUser= userLongitude;
+                            Haversine haversine = new Haversine();
 
-    /**
-     * BUSCA POSTOS INSERIDOS NO FIRESTORE E ADICIONA NO MAPA SEUS MARCADORES
-     */
-
-    private void adicionarMarcadores() {
-
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("/postos")
-                .whereEqualTo("estado", "RS")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (final QueryDocumentSnapshot document : task.getResult()) {
-                                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                                DocumentReference docRef = db.collection("/postos").document(document.getId());
-                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        Posto p = documentSnapshot.toObject(Posto.class);
-                                        //AQUI É FEITO O CALCULO DA DISTANCIA EM METROS ENTRE O USUÁRIO E O POSTO IMPORTADO DA BASE
-
-                                        double lat = Double.parseDouble(p.getLatitude());
-                                        double lon = Double.parseDouble(p.getLongitude());
-
-
-                                        double distanciaCalculada = calcularDistanciaEmMetros(userLatitude, userLongitude, lat, lon);
-                                        //SE O POSTO TIVER ATÉ 2KM PRÓXIMO AO USUÁRIO ENTÃO EXIBE O MARCADOR
-                                        if (distanciaCalculada <= 2000) {
-                                            //ADICIONA MARCADORES E MOVE A CAMERA
-                                            PrincipalActivity principalActivity = new PrincipalActivity();
-                                            String nomePosto = p.getNome();
-                                            String distanciaPosto = "" + distanciaCalculada;
-                                            mMap.addMarker(new MarkerOptions().position(latLng).title(p.getNome()));
-                                            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).build();
-                                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                            Log.d("TESTE", p.getNome() + " marcado!");
-                                        }
-                                    }
-                                });
-
+                            double ditanciaAproximada = haversine.distance(latitudeUser,longitudeUser, latitudePosto, longitudePosto);
+                            Log.d("TESTE" ,"Posto:"+posto.getNome()+" "+ditanciaAproximada);
+                            if(distanciaAproximada<4.0){
+                                postosProximos.add(posto);
                             }
-                        } else {
-                            Log.d("TESTE", "Erro ao ler dados do Firestore!", task.getException());
                         }
                     }
                 });
     }
-
-
 }
