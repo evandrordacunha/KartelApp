@@ -26,8 +26,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Kartel App"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
-        android:textStyle="bold" />
+        android:textColor="@color/common_google_signin_btn_text_dark_default" />
 
     <TextView
         android:id="@+id/textView"

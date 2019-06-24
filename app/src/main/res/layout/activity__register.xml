@@ -63,7 +63,6 @@
         android:background="@drawable/bt_botoes"
         android:text="Cadastrar"
         android:textColor="#fff"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/edit_senha_cad"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/edit_senha_cad"

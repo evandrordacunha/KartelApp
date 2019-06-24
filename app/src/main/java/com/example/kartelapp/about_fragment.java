@@ -1,6 +1,7 @@
 package com.example.kartelapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 
 import com.example.kartelapp.ui.about.AboutFragmentFragment;
@@ -16,7 +17,5 @@ public class about_fragment extends AppCompatActivity {
                     .replace(R.id.container, AboutFragmentFragment.newInstance())
                     .commitNow();
         }
-
     }
-
 }

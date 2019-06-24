@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.core.app.ActivityCompat;
@@ -57,7 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,LocationManager,LocationListener, OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, LocationManager, LocationListener, OnMapReadyCallback {
 
 
     private GroupAdapter adapter;
@@ -66,7 +68,7 @@ public class PrincipalActivity extends AppCompatActivity
     private LatLng latLng;
     double userLatitude;
     double userLongitude;
-    private  double distanciaAproximada;
+    private double distanciaAproximada;
     private List<Posto> postosProximos = new ArrayList<>();
 
 
@@ -74,11 +76,9 @@ public class PrincipalActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -96,12 +96,9 @@ public class PrincipalActivity extends AppCompatActivity
         RecyclerView rv = findViewById(R.id.rv_listaPostos);
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
-
         rv.setAdapter(adapter);
-       // fetchPostos();
-
+        // fetchPostos();
     }
-
 
     @Override
     public void onBackPressed() {
@@ -137,7 +134,6 @@ public class PrincipalActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -161,7 +157,7 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
-            Intent intent = new Intent(getApplicationContext(), CompartilharActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ReclamacaoActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_send) {
@@ -174,8 +170,6 @@ public class PrincipalActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
     /**
      * BUSCANDO POSTOS DO FIREBASE PARA POPULAR O RECYCLER VIEW NA TELA PRINCIPAL
      */
@@ -190,7 +184,6 @@ public class PrincipalActivity extends AppCompatActivity
                             Log.e("TESTE", "Erro: ", e);
                             return;
                         }
-
                         //REFERÊNCIA PARA TODOS POSTOS DA BASE
                         List<DocumentSnapshot> documentos = queryDocumentSnapshots.getDocuments();
                         for (DocumentSnapshot doc : documentos) {
@@ -199,15 +192,14 @@ public class PrincipalActivity extends AppCompatActivity
                             //Log.d("LATITUDE",p.getLatitude());
                             double lon = Double.parseDouble(p.getLongitude());
                             Haversine haversine = new Haversine();
-                            distanciaAproximada = haversine.distance(latitudeUsuario,longitudeUsuario,lat,lon);
-                            if(distanciaAproximada <=4.0){
+                            distanciaAproximada = haversine.distance(latitudeUsuario, longitudeUsuario, lat, lon);
+                            if (distanciaAproximada <= 4.0) {
                                 adapter.add(new PostoItem(p));
                             }
                         }
                     }
                 });
     }
-
     /**
      * MÉTODO USADO PARA SOLICITAR PEDIDO DE PERMISSÃO DE USO DO GPS AO USUARIO
      */
@@ -234,8 +226,8 @@ public class PrincipalActivity extends AppCompatActivity
         pedidosPermissoes = encontrarPermissoesNecessarias(permissoes);
 
         //Verifica se o GPS e a Rede estão ligados, se não pedir ao usuário para ligar
-       if (!isGPS && !isNetwork) {
-        //if (!isGPS) {
+        if (!isGPS &&!isNetwork) {
+            //if (!isGPS) {
             exibirAlertas();
 
         } else {
@@ -297,6 +289,13 @@ public class PrincipalActivity extends AppCompatActivity
         });
         alerta.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                Context contexto = getApplicationContext();
+                String texto = "Você deve permitir o uso do GPS para usar esta aplicação!";
+                int duracao = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(contexto, texto,duracao);
+                toast.show();
+                Intent intent = new Intent(PrincipalActivity.this,LoginActivity.class);
+                startActivity(intent);
                 dialog.cancel();
             }
         });
@@ -337,22 +336,20 @@ public class PrincipalActivity extends AppCompatActivity
         }
         return true;
     }
-
     @Override
     public boolean validaPedidoPermissao() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.CUR_DEVELOPMENT);
     }
-
     @Override
     public void onLocationChanged(Location location) {
         //LOCALIZAÇÃO DO USUÁRIO PARA GERENCIAR O MÉTODO RESPONSÁVEL POR CALCULAR DISTANCIA EM METROS
-       userLatitude = location.getLatitude();
-        userLongitude = location.getLongitude();
-       // userLatitude = -30.0581445;
-       // userLongitude = -51.1767154;
+        userLatitude = location.getLatitude();
+         userLongitude = location.getLongitude();
+        //userLatitude = -30.0581445;
+        //userLongitude = -51.1767154;
 
 
-        fetchPostos(userLatitude,userLongitude);
+        fetchPostos(userLatitude, userLongitude);
         //VERIFICA SE MARCADOR JÁ EXISTE, SE JA EXISTE, REMOVE REMOVE O ATUAL PARA INCLUIR UM NOVO
         if (marcadorUsuario != null) {
             marcadorUsuario.remove();
@@ -382,9 +379,9 @@ public class PrincipalActivity extends AppCompatActivity
             //Log.d("LATITUDE",p.getLatitude());
             double lon = Double.parseDouble(p.getLongitude());
             Haversine haversine = new Haversine();
-            distanciaAproximada = haversine.distance(location.getLatitude(),location.getLongitude(),lat,lon);
+            distanciaAproximada = haversine.distance(location.getLatitude(), location.getLongitude(), lat, lon);
 
-            Log.d("TESTE ","Distancia ON LOCATION CHANGE "+distanciaAproximada);
+            Log.d("TESTE ", "Distancia ON LOCATION CHANGE " + distanciaAproximada);
 
             LatLng posto = new LatLng(lat, lon);
             mMap.addMarker(new MarkerOptions().position(posto).title(p.getNome()));
@@ -445,21 +442,22 @@ public class PrincipalActivity extends AppCompatActivity
             ImageView bandeiraIcone = viewHolder.itemView.findViewById(R.id.im_bandeira);
             TextView distancia = viewHolder.itemView.findViewById(R.id.v_vlDistancia);
 
+
             double latitudePosto = Double.parseDouble(posto.getLatitude());
             double longitudePosto = Double.parseDouble(posto.getLongitude());
-            double latitudeUser= userLatitude;
-            double longitudeUser= userLongitude;
+            double latitudeUser = userLatitude;
+            double longitudeUser = userLongitude;
             Haversine haversine = new Haversine();
-            Log.d("TESTE" ,"Latitude celular:"+""+userLatitude);
-            Log.d("TESTE" ,"Longitude celular:"+""+userLongitude);
-            Log.d("TESTE" ,"Latitude Posto:"+""+ posto.getLatitude());
-            Log.d("TESTE" ,"Longitude Posto :"+""+posto.getLongitude());
+            Log.d("TESTE", "Latitude celular:" + "" + userLatitude);
+            Log.d("TESTE", "Longitude celular:" + "" + userLongitude);
+            Log.d("TESTE", "Latitude Posto:" + "" + posto.getLatitude());
+            Log.d("TESTE", "Longitude Posto :" + "" + posto.getLongitude());
 
-            double ditanciaAproximada = haversine.distance(latitudeUser,longitudeUser, latitudePosto, longitudePosto);
-            Log.d("TESTE" ,"distancia calculada:"+""+ditanciaAproximada);
+            double ditanciaAproximada = haversine.distance(latitudeUser, longitudeUser, latitudePosto, longitudePosto);
+            Log.d("TESTE", "distancia calculada:" + "" + ditanciaAproximada);
 
-            String calcDistancia = String.valueOf(ditanciaAproximada) ;
-            distancia.setText(calcDistancia.substring(0,5));
+            String calcDistancia = String.valueOf(ditanciaAproximada);
+            distancia.setText(calcDistancia.substring(0, 5));
 
 
             //CARREGANDO IMAGEM DAS BANDEIRAS TESTANDO PAA CADA UM DOS POSTOS
@@ -505,6 +503,7 @@ public class PrincipalActivity extends AppCompatActivity
         public int getLayout() {
             return R.layout.item_posto;
         }
+
     }
 
     /**
@@ -517,25 +516,25 @@ public class PrincipalActivity extends AppCompatActivity
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         //VERIFICANDO SE ENCONTROU ALGUMA EXCEÇÃO CAPAZ DE IMPEDIR A EXECUÇÃO, CASO ENCONTRE, PARE A APLICAÇÃO
-                        if(e != null){
-                            Log.e("TESTE","Erro: ",e);
+                        if (e != null) {
+                            Log.e("TESTE", "Erro: ", e);
                             return;
                         }
 
                         //REFERÊNCIA PARA TODOS POSTOS DA BASE
-                        List <DocumentSnapshot> documentos = queryDocumentSnapshots.getDocuments();
+                        List<DocumentSnapshot> documentos = queryDocumentSnapshots.getDocuments();
 
-                        for (DocumentSnapshot doc:documentos) {
-                            Posto posto =  doc.toObject(Posto.class);
+                        for (DocumentSnapshot doc : documentos) {
+                            Posto posto = doc.toObject(Posto.class);
                             double latitudePosto = Double.parseDouble(posto.getLatitude());
                             double longitudePosto = Double.parseDouble(posto.getLongitude());
-                            double latitudeUser= userLatitude;
-                            double longitudeUser= userLongitude;
+                            double latitudeUser = userLatitude;
+                            double longitudeUser = userLongitude;
                             Haversine haversine = new Haversine();
 
-                            double ditanciaAproximada = haversine.distance(latitudeUser,longitudeUser, latitudePosto, longitudePosto);
-                            Log.d("TESTE" ,"Posto:"+posto.getNome()+" "+ditanciaAproximada);
-                            if(distanciaAproximada<4.0){
+                            double ditanciaAproximada = haversine.distance(latitudeUser, longitudeUser, latitudePosto, longitudePosto);
+                            Log.d("TESTE", "Posto:" + posto.getNome() + " " + ditanciaAproximada);
+                            if (distanciaAproximada < 4.0) {
                                 postosProximos.add(posto);
                             }
                         }

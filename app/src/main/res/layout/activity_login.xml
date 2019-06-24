@@ -53,7 +53,6 @@
         android:background="@drawable/bt_botoes"
         android:text="Login"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/edit_senha"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/edit_senha"

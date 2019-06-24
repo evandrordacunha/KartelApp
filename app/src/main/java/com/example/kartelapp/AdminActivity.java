@@ -1,6 +1,7 @@
 package com.example.kartelapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,8 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 public class AdminActivity extends AppCompatActivity {
 
     private Button atualizaDistribuidores;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,6 @@ public class AdminActivity extends AppCompatActivity {
 
                 Dados dado = new Dados(db);
                 dado.inserirPostos(AdminActivity.this);
-
             }
         });
     }

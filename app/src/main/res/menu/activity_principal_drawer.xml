@@ -23,18 +23,23 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_parceiros_24dp"
             android:title="Parceiros Indicados" />
+
     </group>
 
     <item android:title="Mais...">
         <menu>
+
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Compartilhar" />
+                android:icon="@drawable/ic_contato"
+                android:title="Denunciar" />
+
+
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_contacts_black_24dp"
                 android:title="Suporte" />
+
         </menu>
     </item>
 

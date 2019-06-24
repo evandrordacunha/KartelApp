@@ -50,7 +50,6 @@
         android:background="@drawable/bt_botoes"
         android:text="Recuperar senha"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/edit_email_recupera"
         app:layout_constraintStart_toStartOf="@+id/edit_email_recupera"
         app:layout_constraintTop_toBottomOf="@+id/edit_email_recupera" />

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fundo"
-    tools:context=".AdminActivity">
+    tools:context="com.example.kartelapp.AdminActivity">
 
     <ImageView
         android:id="@+id/imageView5"
@@ -31,7 +31,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="Área administrativa"
-        android:textFontWeight="16dp"
         android:textColor="@color/amarelo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +47,6 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/bt_botoes"
         android:textColor="@color/branco"
-        android:textFontWeight="16dp"
         android:text="Atualizar distribuidores"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

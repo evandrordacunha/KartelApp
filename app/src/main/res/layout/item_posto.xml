@@ -30,7 +30,6 @@
         android:text="Posto"
         android:textColor="@color/preto"
         android:textSize="16sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/im_bandeira"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -106,7 +105,7 @@
         android:layout_height="wrap_content"
         android:text="G.Aditiv  "
         android:textAlignment="center"
-        android:textColor="@color/azulFraco"
+        android:textColor="@color/azulForte"
         app:layout_constraintEnd_toStartOf="@+id/v_etanol"
         app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
 
@@ -160,7 +159,6 @@
         android:text="R$"
         android:textAlignment="center"
         android:textColor="@color/preto"
-        android:textFontWeight="bold"
         app:layout_constraintEnd_toEndOf="@+id/v_etanol"
         app:layout_constraintStart_toEndOf="@+id/v_vlAditivada"
         app:layout_constraintTop_toBottomOf="@+id/v_etanol" />
@@ -184,23 +182,6 @@
         android:text="R$"
         app:layout_constraintEnd_toEndOf="@+id/v_gnv"
         app:layout_constraintTop_toBottomOf="@+id/v_gnv" />
-
-    <Button
-        android:id="@+id/bt_formReclacamao"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:background="@drawable/bt_botoes_menores"
-        android:text="Apontar irregularidade"
-        android:textColor="@color/branco"
-        android:textSize="9dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_vlDistancia" />
 
     <TextView
         android:id="@+id/v_distancia"
