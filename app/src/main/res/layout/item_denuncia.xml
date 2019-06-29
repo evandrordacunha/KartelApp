@@ -1,128 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/branco"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/v_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <ImageView
+        android:id="@+id/im_bandeiraDenunciaItem"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Posto:"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/vl_postoDenunciado"
+        android:id="@+id/vl_nomeParceiroItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/v_data"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/v_enderecoPostoDenunciado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="Endereço:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_data" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Posto"
+        android:textColor="@color/preto"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintTop_toTopOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/vl_enderecoPostoDenunciado"
+        android:id="@+id/vl_enderecoDenunciaItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/v_enderecoPostoDenunciado"
-        app:layout_constraintTop_toBottomOf="@+id/vl_postoDenunciado" />
-
-    <TextView
-        android:id="@+id/v_bairroPostoDenunciado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="Bairro:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_enderecoPostoDenunciado" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Endereco"
+        android:textColor="@color/preto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toEndOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintTop_toBottomOf="@+id/vl_nomeParceiroItem" />
 
     <TextView
-        android:id="@+id/vl_bairroPostoDenunciado"
+        android:id="@+id/vl_bairroDenunciaItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/v_bairroPostoDenunciado"
-        app:layout_constraintTop_toBottomOf="@+id/vl_enderecoPostoDenunciado" />
-
-    <TextView
-        android:id="@+id/v_cidadePostoDenunciado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="Cidade:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_bairroPostoDenunciado" />
+        android:textColor="@color/preto"
+        android:text="Bairro"
+        app:layout_constraintStart_toEndOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintTop_toBottomOf="@+id/vl_enderecoDenunciaItem" />
 
     <TextView
-        android:id="@+id/vl_cidadePostoDenunciado"
+        android:id="@+id/vc_cidadeDenunciaItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="TextView"
+        android:text="Cidade"
+        android:textColor="@color/preto"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/v_cidadePostoDenunciado"
-        app:layout_constraintTop_toBottomOf="@+id/vl_bairroPostoDenunciado" />
+        app:layout_constraintStart_toEndOf="@+id/vl_bairroDenunciaItem"
+        app:layout_constraintTop_toBottomOf="@+id/vl_enderecoDenunciaItem" />
 
     <TextView
-        android:id="@+id/v_cnpjPostoDenunciado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="CNPJ:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_cidadePostoDenunciado" />
-
-    <TextView
-        android:id="@+id/vl_cnpjPostoDenunciado"
+        android:id="@+id/vl_cnpjDenunciaItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="TextView"
+        android:textColor="@color/preto"
+        android:text="Cnpj"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/v_cnpjPostoDenunciado"
-        app:layout_constraintTop_toBottomOf="@+id/vl_cidadePostoDenunciado" />
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/vl_bairroDenunciaItem" />
 
     <TextView
-        android:id="@+id/v_totalReclamacoes"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_height="18dp"
+        android:textColor="@color/preto"
         android:text="Total de reclamações:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_cnpjPostoDenunciado" />
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/preto"
+        android:text="Cnpj:"
+        app:layout_constraintStart_toStartOf="@+id/vl_bairroDenunciaItem"
+        app:layout_constraintTop_toBottomOf="@+id/vl_bairroDenunciaItem" />
 
     <TextView
         android:id="@+id/vl_totalReclamacoes"
@@ -130,8 +111,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:textColor="@color/preto"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/v_totalReclamacoes"
-        app:layout_constraintTop_toBottomOf="@+id/vl_cnpjPostoDenunciado" />
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/vl_cnpjDenunciaItem" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

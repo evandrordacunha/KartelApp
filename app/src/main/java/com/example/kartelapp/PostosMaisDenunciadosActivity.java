@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -15,35 +16,29 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.ViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PostosMaisDenunciadosActivity extends AppCompatActivity {
 
     private GroupAdapter adapter;
-    private ArrayList<Posto> postosNaBase = new ArrayList<>();
     private ArrayList<Denuncia> denunciasNaBase = new ArrayList<>();
-    private HashMap<Posto, Integer> totalDenunciasPostos = new HashMap<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fetchDenuncia();
         setContentView(R.layout.activity_postos_mais_denunciados);
+        fetchPostos();
         RecyclerView rv = findViewById(R.id.rv_postosDenunciados);
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
-        fetchPostos();
-        carregarPostosComDenuncias();
-        adapter.add(new DenunciaItem());
-
 
     }
 
@@ -52,43 +47,68 @@ public class PostosMaisDenunciadosActivity extends AppCompatActivity {
      * CLASSE INTERNA RESPONSAVEL POR MANIPULAR ITENS QUE APARECERÃO NA RECYCLER VIEW LISTANDOS OS POSTOS
      */
     private class DenunciaItem extends Item<ViewHolder> {
+        private final Posto posto;
+        private int count;
 
-
-        private DenunciaItem() {
-
+        private DenunciaItem(Posto p, int c) {
+            this.posto = p;
+            this.count = c;
         }
 
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
-
             //CONECTANDO AOS OBJETOS PARA PODER EDITAR SEUS VALORES
-            TextView posto = viewHolder.itemView.findViewById(R.id.vl_postoDenunciado);
-            TextView endereco = viewHolder.itemView.findViewById(R.id.vl_enderecoPostoDenunciado);
-            TextView bairro = viewHolder.itemView.findViewById(R.id.vl_bairroPostoDenunciado);
-            TextView cidade = viewHolder.itemView.findViewById(R.id.vl_cidadePostoDenunciado);
-            TextView cnpj = viewHolder.itemView.findViewById(R.id.vl_cnpjPostoDenunciado);
-            TextView reclamacoes = viewHolder.itemView.findViewById(R.id.vl_totalReclamacoes);
+            TextView nomePosto = viewHolder.itemView.findViewById(R.id.vl_nomeParceiroItem);
+            TextView endereco = viewHolder.itemView.findViewById(R.id.vl_enderecoDenunciaItem);
+            TextView bairro = viewHolder.itemView.findViewById(R.id.vl_bairroDenunciaItem);
+            TextView cidade = viewHolder.itemView.findViewById(R.id.vc_cidadeDenunciaItem);
+            ImageView bandeiraIcone = viewHolder.itemView.findViewById(R.id.im_bandeiraDenunciaItem);
+            TextView cnpj = viewHolder.itemView.findViewById(R.id.vl_cnpjDenunciaItem);
+            TextView reclacamacoes = viewHolder.itemView.findViewById(R.id.vl_totalReclamacoes);
 
-            for (Map.Entry<Posto, Integer> entrada : totalDenunciasPostos.entrySet()) {
 
-                Posto p = entrada.getKey();
-                int totalReclamacoes = entrada.getValue();
-                //POPULANDO DADOS DO ITEM COM O RESTANTE DOS ATRIBUTOS
-                posto.setText(p.getNome());
-                endereco.setText(p.getEndereco());
-                bairro.setText(p.getBairro());
-                cidade.setText(p.getCidade());
-                cnpj.setText(p.getCnpj());
-                reclamacoes.setText(String.valueOf(totalReclamacoes));
+            //CARREGANDO IMAGEM DAS BANDEIRAS TESTANDO PARA CADA UM DOS POSTOS
+            if (posto.getBandeira().equalsIgnoreCase("PETROBRAS")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraPetrobras.jpg?alt=media&token=d53b4fee-d299-4422-a9e7-43d034613ec5")
+                        .into(bandeiraIcone);
             }
+            if (posto.getBandeira().equalsIgnoreCase("IPIRANGA")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraIpiranga.jpg?alt=media&token=b0c55805-61cc-45f2-886f-51be07bb0fed")
+                        .into(bandeiraIcone);
+            }
+            if (posto.getBandeira().equalsIgnoreCase("SHELL")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraShell.jpg?alt=media&token=4874b289-f988-4dce-aa09-7011f0e1db9e")
+                        .into(bandeiraIcone);
+            }
+            if (posto.getBandeira().equalsIgnoreCase("MEGAPETRO")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraMegapetro.jpg?alt=media&token=71eed8b5-05f4-4e81-9a40-e4081bcf8de6")
+                        .into(bandeiraIcone);
+            }
+            if (posto.getBandeira().equalsIgnoreCase("BRANCA")) {
+                Picasso.get()
+                        .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraBranca.jpg?alt=media&token=bee27663-f1a9-48bc-9243-6856f95929f7")
+                        .into(bandeiraIcone);
+            }
+
+            //POPULANDO DADOS DO ITEM COM O RESTANTE DOS ATRIBUTOS
+            nomePosto.setText(posto.getNome());
+            endereco.setText(posto.getEndereco());
+            bairro.setText(posto.getBairro());
+            cidade.setText(posto.getCidade());
+            cnpj.setText(posto.getCnpj());
+            reclacamacoes.setText("" + count);
 
         }
 
         @Override
         public int getLayout() {
             return R.layout.item_denuncia;
-
         }
+
     }
 
     /**
@@ -112,14 +132,9 @@ public class PostosMaisDenunciadosActivity extends AppCompatActivity {
 
                         for (DocumentSnapshot doc : documentos) {
                             Denuncia denuncia = doc.toObject(Denuncia.class);
-
-
                             Log.d("TESTE", denuncia.getPosto() + "denunciado!");
                             denunciasNaBase.add(denuncia);
                         }
-
-
-
                     }
                 });
     }
@@ -129,6 +144,7 @@ public class PostosMaisDenunciadosActivity extends AppCompatActivity {
      */
     private void fetchPostos() {
         //CRIA UMA REFERENCIA PARA A COLEÇÃO DE POSTOS
+
         FirebaseFirestore.getInstance().collection("/postos")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -144,43 +160,20 @@ public class PostosMaisDenunciadosActivity extends AppCompatActivity {
 
                         for (DocumentSnapshot doc : documentos) {
                             Posto posto = doc.toObject(Posto.class);
+                            int cont = 0;
+                            for (int i = 0; i < denunciasNaBase.size(); i++) {
 
-
-                            Log.d("TESTE", posto.getNome());
-                            postosNaBase.add(posto);
+                                if (denunciasNaBase.get(i).getPosto().equalsIgnoreCase(posto.getCnpj())) {
+                                    Log.d("TESTE", "Posto  " + posto.getCnpj() + "denuncia  " + denunciasNaBase.get(i).getPosto());
+                                    cont++;
+                                }
+                            }
+                            if (cont > 0) {
+                                adapter.add(new DenunciaItem(posto, cont));
+                            }
                         }
 
-                        fetchDenuncia();
                     }
                 });
-    }
-
-    /**
-     * PERCORRE LISTA DE POSTOS DA BASE E VERIFICA SE OS POSTOS COM DENUNCIAS E CARREGA PARA UMA NOVA LISTA
-     */
-    private void carregarPostosComDenuncias() {
-        Posto posto = null;
-        Denuncia denuncia = null;
-
-        for(int i=0; i< postosNaBase.size();i++){
-            //referenciando um posto da base
-            posto = postosNaBase.get(i);
-            int count = 0; //contador de denuncias
-
-            for(int j =0; j< denunciasNaBase.size();j++){
-                //referenciando uma denuncia
-                denuncia = denunciasNaBase.get(j);
-                if(posto.getCnpj() == denuncia.getPosto()) {
-                    Log.d("TESTE POSTO ( "+i+")", posto.getCnpj());
-                    Log.d("TESTE DENUNCIA ( "+j+")", denuncia.getPosto());
-                    count++;
-                }
-            }
-            Log.d("TESTE","Posto  " +posto.getNome() +"com  "+count +" denuncias");
-            totalDenunciasPostos.put(posto,count);
-        }
-
-        adapter.notifyDataSetChanged();
-
     }
 }

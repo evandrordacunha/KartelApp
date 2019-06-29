@@ -3,13 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/principal"
     android:layout_width="match_parent"
     android:background="@color/branco"
     android:layout_height="wrap_content">
 
 
     <ImageView
-        android:id="@+id/im_bandeira"
+        android:id="@+id/im_bandeiraDenunciaItem"
         android:layout_width="37dp"
         android:layout_height="37dp"
         android:layout_marginStart="8dp"
@@ -20,7 +21,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/v_razao_social"
+        android:id="@+id/vl_nomeParceiroItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -30,15 +31,15 @@
         android:text="Posto"
         android:textColor="@color/preto"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/im_bandeira"
+        app:layout_constraintBottom_toBottomOf="@+id/im_bandeiraDenunciaItem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/im_bandeira"
-        app:layout_constraintTop_toTopOf="@+id/im_bandeira"
+        app:layout_constraintStart_toEndOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintTop_toTopOf="@+id/im_bandeiraDenunciaItem"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/v_enderecoPostoDenunciado"
+        android:id="@+id/vl_enderecoDenunciaItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -49,22 +50,22 @@
         android:textColor="@color/preto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.511"
-        app:layout_constraintStart_toEndOf="@+id/im_bandeira"
-        app:layout_constraintTop_toBottomOf="@+id/v_razao_social" />
+        app:layout_constraintStart_toEndOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintTop_toBottomOf="@+id/vl_nomeParceiroItem" />
 
     <TextView
-        android:id="@+id/v_bairro"
+        android:id="@+id/vl_bairroDenunciaItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:textColor="@color/preto"
         android:text="Bairro"
-        app:layout_constraintStart_toEndOf="@+id/im_bandeira"
-        app:layout_constraintTop_toBottomOf="@+id/v_enderecoPostoDenunciado" />
+        app:layout_constraintStart_toEndOf="@+id/im_bandeiraDenunciaItem"
+        app:layout_constraintTop_toBottomOf="@+id/vl_enderecoDenunciaItem" />
 
     <TextView
-        android:id="@+id/v_cidade"
+        android:id="@+id/vc_cidadeDenunciaItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -74,8 +75,8 @@
         android:text="Cidade"
         android:textColor="@color/preto"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/v_bairro"
-        app:layout_constraintTop_toBottomOf="@+id/v_enderecoPostoDenunciado" />
+        app:layout_constraintStart_toEndOf="@+id/vl_bairroDenunciaItem"
+        app:layout_constraintTop_toBottomOf="@+id/vl_enderecoDenunciaItem" />
 
     <TextView
         android:id="@+id/v_gasolinaComum"
@@ -97,7 +98,7 @@
         android:textAlignment="center"
         android:textColor="@color/verdeMilitar"
         app:layout_constraintEnd_toStartOf="@+id/v_diesel"
-        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+        app:layout_constraintTop_toBottomOf="@+id/vc_cidadeDenunciaItem" />
 
     <TextView
         android:id="@+id/v_gasolinaAditivada"
@@ -107,7 +108,7 @@
         android:textAlignment="center"
         android:textColor="@color/azulForte"
         app:layout_constraintEnd_toStartOf="@+id/v_etanol"
-        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+        app:layout_constraintTop_toBottomOf="@+id/vc_cidadeDenunciaItem" />
 
     <TextView
         android:id="@+id/v_diesel"
@@ -117,7 +118,7 @@
         android:textAlignment="center"
         android:textColor="@color/preto"
         app:layout_constraintEnd_toStartOf="@+id/v_gnv"
-        app:layout_constraintTop_toBottomOf="@+id/v_cidade" />
+        app:layout_constraintTop_toBottomOf="@+id/vc_cidadeDenunciaItem" />
 
     <TextView
         android:id="@+id/v_gnv"

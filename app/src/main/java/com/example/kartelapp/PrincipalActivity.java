@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.core.app.ActivityCompat;
@@ -38,8 +37,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -430,16 +427,16 @@ public class PrincipalActivity extends AppCompatActivity
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
             //CONECTANDO AOS OBJETOS PARA PODER EDITAR SEUS VALORES
-            TextView nome = viewHolder.itemView.findViewById(R.id.v_razao_social);
-            TextView endereco = viewHolder.itemView.findViewById(R.id.v_enderecoPostoDenunciado);
-            TextView bairro = viewHolder.itemView.findViewById(R.id.v_bairro);
-            TextView cidade = viewHolder.itemView.findViewById(R.id.v_cidade);
+            TextView nome = viewHolder.itemView.findViewById(R.id.vl_nomeParceiroItem);
+            TextView endereco = viewHolder.itemView.findViewById(R.id.vl_enderecoDenunciaItem);
+            TextView bairro = viewHolder.itemView.findViewById(R.id.vl_bairroDenunciaItem);
+            TextView cidade = viewHolder.itemView.findViewById(R.id.vc_cidadeDenunciaItem);
             TextView gasolinaComum = viewHolder.itemView.findViewById(R.id.v_vlComum);
             TextView gasolinaAditivada = viewHolder.itemView.findViewById(R.id.v_vlAditivada);
             TextView etanol = viewHolder.itemView.findViewById(R.id.v_vlEtanol);
             TextView diesel = viewHolder.itemView.findViewById(R.id.v_vlDiesel);
             TextView gnv = viewHolder.itemView.findViewById(R.id.v_vlGnv);
-            ImageView bandeiraIcone = viewHolder.itemView.findViewById(R.id.im_bandeira);
+            ImageView bandeiraIcone = viewHolder.itemView.findViewById(R.id.im_bandeiraDenunciaItem);
             TextView distancia = viewHolder.itemView.findViewById(R.id.v_vlDistancia);
 
 
@@ -460,7 +457,7 @@ public class PrincipalActivity extends AppCompatActivity
             distancia.setText(calcDistancia.substring(0, 5));
 
 
-            //CARREGANDO IMAGEM DAS BANDEIRAS TESTANDO PAA CADA UM DOS POSTOS
+            //CARREGANDO IMAGEM DAS BANDEIRAS TESTANDO PARA CADA UM DOS POSTOS
             if (posto.getBandeira().equalsIgnoreCase("PETROBRAS")) {
                 Picasso.get()
                         .load("https://firebasestorage.googleapis.com/v0/b/kartel-59019.appspot.com/o/images%2FbandeiraPetrobras.jpg?alt=media&token=d53b4fee-d299-4422-a9e7-43d034613ec5")
